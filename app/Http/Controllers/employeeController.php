@@ -27,7 +27,7 @@ class employeeController extends Controller
         }
 
         $employess = collect($data['data'])->map(function ($employee) {
-            $publicUrl = Storage::url($employee['image']);
+            $publicUrl = Storage::disk('s3')->url($employee['image']);
             $employee['image'] = $publicUrl;
             $position = $employee['position'];
             unset($employee['position']);
@@ -57,7 +57,8 @@ class employeeController extends Controller
                 'position' => ['required', 'string']
             ]);
 
-            $imagePath = $request->file('image')->store('employee_profile', 'public');
+            $imagePath = $request->file('image')->store('employee_profile', ['disk' => 's3', 'visibility' => 'public']);
+
 
             employee::create([
                 'divisionId' => $request->division,
@@ -102,9 +103,9 @@ class employeeController extends Controller
                 ], 404);
             }
 
-            Storage::disk('public')->delete($employee->image);
+            Storage::disk('s3')->delete($employee->image);
 
-            $imagePath = $request->file('image')->store('employee_profile', 'public');
+            $imagePath = $request->file('image')->store('employee_profile', ['disk' => 's3', 'visibility' => 'public']);
 
             $employee->update([
                 'divisionId' => $request->division,
@@ -139,7 +140,7 @@ class employeeController extends Controller
             ], 404);
         }
 
-        Storage::disk('public')->delete($employee->image);
+        Storage::disk('s3')->delete($employee->image);
 
         $employee->delete();
 
