@@ -12,9 +12,9 @@ Route::post('logout', [authController::class, 'destroy'])->middleware('auth:sanc
 
 Route::get('divisions', [divisionController::class, 'index'])->middleware('auth:sanctum');
 
-Route::prefix('employees')->group(function () {
+Route::middleware('auth:sanctum')->prefix('employees')->group(function () {
     Route::get('/', [employeeController::class, 'index']);
-    Route::post('/',[employeeController::class,'store']);
-    Route::put('{id}',[employeeController::class,'update']);
-    Route::delete('{id}',[employeeController::class,'destory']);
-})->middleware('auth:sanctum');
+    Route::post('/', [employeeController::class, 'store']);
+    Route::put('{id}', [employeeController::class, 'update']);
+    Route::delete('{id}', [employeeController::class, 'destroy']); // <- typo fix di sini juga
+});

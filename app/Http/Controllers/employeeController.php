@@ -130,7 +130,7 @@ class employeeController extends Controller
         }
     }
 
-    public function destory($id)
+    public function destroy($id)
     {
         $employee = employee::find($id);
         if (!$employee) {
