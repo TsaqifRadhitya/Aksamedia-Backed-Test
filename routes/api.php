@@ -17,4 +17,4 @@ Route::prefix('employees')->group(function () {
     Route::post('/',[employeeController::class,'store']);
     Route::put('{id}',[employeeController::class,'update']);
     Route::delete('{id}',[employeeController::class,'destory']);
-});
+})->middleware('auth:sanctum');
